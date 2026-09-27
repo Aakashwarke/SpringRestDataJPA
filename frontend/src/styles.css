@@ -1,0 +1,428 @@
+/* ---------------------------------------------------------------------------
+   SpringLaunch design tokens.
+
+   Plain CSS with custom properties rather than a utility framework: one file to
+   restyle, no build-tool coupling, and nothing to migrate when Tailwind majors.
+   Every colour is declared on :root first, then redefined for dark, so no value
+   exists only inside a media query.
+   --------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  --paper: #f4f6f4;
+  --surface: #ffffff;
+  --surface-alt: #eef1ee;
+  --ink: #11181a;
+  --ink-soft: #47554f;
+  --ink-faint: #6d7a74;
+  --rule: #d6dcd7;
+  --rule-strong: #bcc6bd;
+
+  --leaf: #2f6b34;
+  --leaf-hover: #275a2c;
+  --leaf-soft: #e4efe2;
+  --signal: #9c6512;
+  --signal-soft: #f6ecd9;
+  --danger: #a3372c;
+  --danger-soft: #f7e5e2;
+
+  --radius: 6px;
+  --radius-lg: 9px;
+  --shadow: 0 1px 2px rgba(17, 24, 26, 0.06), 0 4px 12px rgba(17, 24, 26, 0.04);
+
+  --sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --serif: Bitter, Georgia, 'Times New Roman', serif;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --sidebar-w: 232px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --paper: #0d1214;
+    --surface: #151d1f;
+    --surface-alt: #1c2528;
+    --ink: #e7eee9;
+    --ink-soft: #a7b4ae;
+    --ink-faint: #7d8c85;
+    --rule: #273234;
+    --rule-strong: #38464a;
+    --leaf: #8cc76a;
+    --leaf-hover: #9ed57d;
+    --leaf-soft: #1b2a1d;
+    --signal: #d9a94f;
+    --signal-soft: #2b2317;
+    --danger: #e0806f;
+    --danger-soft: #2e1d1a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.3);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #0d1214;
+  --surface: #151d1f;
+  --surface-alt: #1c2528;
+  --ink: #e7eee9;
+  --ink-soft: #a7b4ae;
+  --ink-faint: #7d8c85;
+  --rule: #273234;
+  --rule-strong: #38464a;
+  --leaf: #8cc76a;
+  --leaf-hover: #9ed57d;
+  --leaf-soft: #1b2a1d;
+  --signal: #d9a94f;
+  --signal-soft: #2b2317;
+  --danger: #e0806f;
+  --danger-soft: #2e1d1a;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: var(--serif); margin: 0; line-height: 1.2; text-wrap: balance; }
+p { margin: 0; }
+a { color: var(--leaf); }
+code, .mono { font-family: var(--mono); font-size: 0.86em; }
+
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- shell ---------- */
+
+.shell { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100%; }
+
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 12px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 4px 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--leaf); flex: none; }
+
+.nav-label {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: 14px 10px 5px;
+}
+
+.nav-item {
+  display: block;
+  padding: 7px 10px;
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.nav-item:hover { background: var(--surface-alt); color: var(--ink); }
+.nav-item.active { background: var(--leaf-soft); color: var(--leaf); }
+
+.sidebar-foot { margin-top: auto; display: flex; flex-direction: column; gap: 8px; padding: 10px; }
+.sidebar-foot .who { font-size: 0.82rem; color: var(--ink-faint); overflow-wrap: anywhere; }
+
+.main { display: flex; flex-direction: column; min-width: 0; }
+
+.topbar {
+  border-bottom: 1px solid var(--rule);
+  background: var(--surface);
+  padding: 14px 26px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.topbar h1 { font-size: 1.28rem; font-weight: 600; }
+.topbar .spacer { flex: 1; }
+
+.content { padding: 24px 26px 56px; display: flex; flex-direction: column; gap: 20px; }
+
+@media (max-width: 760px) {
+  .shell { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; border-right: none; border-bottom: 1px solid var(--rule); }
+  .brand { padding: 4px 8px; }
+  .nav-label { display: none; }
+  .sidebar-foot { margin-top: 0; flex-direction: row; align-items: center; padding: 4px; }
+  .sidebar-foot .who { display: none; }
+  .content { padding: 18px 16px 48px; }
+  .topbar { padding: 12px 16px; }
+}
+
+/* ---------- card ---------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+}
+
+.card.flush { padding: 0; overflow: hidden; }
+
+.card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.card-head h2 { font-size: 1.02rem; font-weight: 600; }
+.card-head .spacer { flex: 1; }
+.card-sub { font-size: 0.88rem; color: var(--ink-soft); }
+
+.grid { display: grid; gap: 14px; }
+.grid.cols-3 { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.grid.cols-2 { grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); }
+
+/* ---------- stat ---------- */
+
+.stat .k {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.stat .v { font-family: var(--mono); font-size: 1.85rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
+.stat .sub { font-size: 0.83rem; color: var(--ink-faint); }
+
+/* ---------- meter ---------- */
+
+.meter { height: 6px; background: var(--surface-alt); border-radius: 99px; overflow: hidden; margin-top: 8px; }
+.meter > span { display: block; height: 100%; background: var(--leaf); border-radius: 99px; }
+.meter > span.warn { background: var(--signal); }
+.meter > span.full { background: var(--danger); }
+
+/* ---------- button ---------- */
+
+.btn {
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.89rem;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  background: var(--leaf);
+  color: var(--paper);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.btn:hover:not(:disabled) { background: var(--leaf-hover); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+.btn.secondary { background: var(--surface); color: var(--ink); border-color: var(--rule-strong); }
+.btn.secondary:hover:not(:disabled) { background: var(--surface-alt); }
+.btn.danger { background: transparent; color: var(--danger); border-color: var(--rule-strong); }
+.btn.danger:hover:not(:disabled) { background: var(--danger-soft); }
+.btn.sm { padding: 5px 10px; font-size: 0.82rem; }
+
+/* ---------- form ---------- */
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 0.85rem; font-weight: 500; color: var(--ink-soft); }
+
+.field input, .field textarea, .field select {
+  font: inherit;
+  padding: 8px 11px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  width: 100%;
+}
+
+.field input:focus, .field textarea:focus, .field select:focus {
+  outline: 2px solid var(--leaf);
+  outline-offset: -1px;
+  border-color: var(--leaf);
+}
+
+.field .hint { font-size: 0.79rem; color: var(--ink-faint); }
+.field .err { font-size: 0.79rem; color: var(--danger); }
+
+form.stack { display: flex; flex-direction: column; gap: 14px; }
+.row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+
+/* ---------- table ---------- */
+
+.table-wrap { overflow-x: auto; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+
+th {
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 400;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+
+td { padding: 11px 16px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface-alt); }
+td.right, th.right { text-align: right; }
+
+.empty { padding: 34px 20px; text-align: center; color: var(--ink-faint); font-size: 0.9rem; }
+
+/* ---------- badge ---------- */
+
+.badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 99px;
+  border: 1px solid var(--rule-strong);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.badge.leaf { background: var(--leaf-soft); color: var(--leaf); border-color: transparent; }
+.badge.signal { background: var(--signal-soft); color: var(--signal); border-color: transparent; }
+.badge.danger { background: var(--danger-soft); color: var(--danger); border-color: transparent; }
+
+/* ---------- notices ---------- */
+
+.notice {
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ink-faint);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 12px 15px;
+  font-size: 0.89rem;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.notice.quota { border-left-color: var(--signal); background: var(--signal-soft); }
+.notice.error { border-left-color: var(--danger); background: var(--danger-soft); color: var(--ink); }
+.notice.good { border-left-color: var(--leaf); background: var(--leaf-soft); }
+.notice strong { font-weight: 600; }
+
+/* ---------- modal ---------- */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 13, 14, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 50;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 460px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal h2 { font-size: 1.08rem; font-weight: 600; }
+.modal-actions { display: flex; gap: 9px; justify-content: flex-end; flex-wrap: wrap; }
+
+/* ---------- auth screens ---------- */
+
+.auth-page {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.auth-card .lede { color: var(--ink-soft); font-size: 0.92rem; }
+.auth-card h1 { font-size: 1.7rem; font-weight: 700; }
+.auth-foot { font-size: 0.88rem; color: var(--ink-soft); text-align: center; }
+
+/* ---------- misc ---------- */
+
+.secret {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  background: var(--surface-alt);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  overflow-wrap: anywhere;
+}
+
+.plan-tier { display: flex; flex-direction: column; gap: 10px; }
+.plan-tier .price { font-family: var(--mono); font-size: 1.6rem; font-weight: 500; line-height: 1; }
+.plan-tier .price small { font-size: 0.72rem; color: var(--ink-faint); }
+.plan-tier ul { margin: 0; padding-left: 1.15em; font-size: 0.86rem; color: var(--ink-soft); }
+.plan-tier.current { border-color: var(--leaf); box-shadow: inset 0 0 0 1px var(--leaf); }
+
+.skeleton { color: var(--ink-faint); font-size: 0.9rem; padding: 18px 0; }
+
+.icon-btn {
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 5px 9px;
+}
+.icon-btn:hover { background: var(--surface-alt); color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

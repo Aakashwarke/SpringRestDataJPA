@@ -135,4 +135,79 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <!--
+      Builds the React frontend and packages it into the jar, so one artifact serves
+      both the API and the UI:  mvn -Pfrontend clean package
+
+      Kept in a profile on purpose. The default build stays pure Java with no Node
+      download, which is what keeps `mvn spring-boot:run` and `mvn test` fast and
+      dependency-free. Delete this profile and the frontend/ directory if you are
+      bringing your own UI.
+    -->
+    <profile>
+      <id>frontend</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>1.15.1</version>
+            <configuration>
+              <workingDirectory>frontend</workingDirectory>
+              <installDirectory>${project.build.directory}</installDirectory>
+            </configuration>
+            <executions>
+              <execution>
+                <id>install-node-and-npm</id>
+                <goals><goal>install-node-and-npm</goal></goals>
+                <configuration>
+                  <nodeVersion>v22.11.0</nodeVersion>
+                </configuration>
+              </execution>
+              <execution>
+                <id>npm-ci</id>
+                <goals><goal>npm</goal></goals>
+                <configuration>
+                  <!-- ci, not install: builds exactly what package-lock.json pins. -->
+                  <arguments>ci --no-audit --no-fund</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>npm-build</id>
+                <goals><goal>npm</goal></goals>
+                <configuration>
+                  <arguments>run build</arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>copy-frontend-dist</id>
+                <phase>prepare-package</phase>
+                <goals><goal>copy-resources</goal></goals>
+                <configuration>
+                  <!-- Spring Boot serves classpath:/static, and SpaForwardingConfig
+                       activates as soon as index.html lands here. -->
+                  <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>frontend/dist</directory>
+                      <filtering>false</filtering>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>

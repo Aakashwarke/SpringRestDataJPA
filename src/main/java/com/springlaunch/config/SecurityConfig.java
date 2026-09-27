@@ -9,6 +9,7 @@ import com.springlaunch.common.ApiError;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,6 +42,17 @@ public class SecurityConfig {
         "/error"
     };
 
+    /**
+     * The single-page frontend's own files and client-side routes.
+     *
+     * <p>Serving an application shell to an anonymous browser gives nothing away: the shell holds
+     * no data, and every route inside it fetches from {@code /api/v1/**}, which stays authenticated.
+     * The single-segment pattern cannot match an API path, all of which are deeper than one segment.
+     */
+    private static final String[] SPA_ASSETS = {"/", "/index.html", "/favicon.ico", "/assets/**"};
+
+    private static final String SPA_ROUTES = "/{path:[^\\.]*}";
+
     private final JwtService jwtService;
     private final ApiKeyService apiKeyService;
     private final ObjectMapper objectMapper;
@@ -60,6 +72,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, SPA_ASSETS).permitAll()
+                        .requestMatchers(HttpMethod.GET, SPA_ROUTES).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(handling -> handling
                         .authenticationEntryPoint(authenticationEntryPoint())

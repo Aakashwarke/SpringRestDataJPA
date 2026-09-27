@@ -9,6 +9,9 @@ plumbing a subscription business needs on day one is here, wired together and co
 git clone <your-repo> && cd springlaunch
 mvn spring-boot:run
 # → http://localhost:8080/swagger-ui.html
+
+mvn -Pfrontend clean package && java -jar target/*.jar
+# → http://localhost:8080  (API + React dashboard in one jar)
 ```
 
 No database to install, no Stripe account, no API keys. It boots.
@@ -28,6 +31,7 @@ No database to install, no Stripe account, no API keys. It boots.
 | **Audit log** | Append-only, per-tenant trail of who did what |
 | **Operations** | Flyway migrations, OpenAPI/Swagger, health probes, Docker, docker-compose, GitHub Actions CI |
 | **Tests** | 40 tests: tenant isolation, quota boundaries, token rotation, webhook forgery and replay |
+| **Frontend** *(optional)* | React 18 + TypeScript dashboard covering every endpoint — or delete it and bring your own |
 
 ## The three things that are hard to get right, and are done here
 
@@ -56,6 +60,7 @@ succeed.
 | Document | What it covers |
 |---|---|
 | [docs/QUICKSTART.md](docs/QUICKSTART.md) | Running it, and your first authenticated request |
+| [docs/FRONTEND.md](docs/FRONTEND.md) | The optional React dashboard, and how to remove it |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | How it's built, the trade-offs taken, and where to extend |
 | [docs/DEPLOY.md](docs/DEPLOY.md) | Postgres, secrets, Stripe setup, and going live |
 | [LICENSE.md](LICENSE.md) | Commercial license terms |
