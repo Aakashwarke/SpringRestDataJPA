@@ -1,0 +1,35 @@
+# Brings up Postgres and the API together: `docker compose up --build`.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: springlaunch
+      POSTGRES_USER: springlaunch
+      POSTGRES_PASSWORD: springlaunch
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U springlaunch"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    depends_on:
+      db:
+        # Waits for Postgres to accept connections, not merely to have started.
+        condition: service_healthy
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/springlaunch
+      DATABASE_USERNAME: springlaunch
+      DATABASE_PASSWORD: springlaunch
+      JWT_SECRET: local-development-secret-at-least-32-bytes-long-please-change
+      BILLING_PROVIDER: fake
+    ports:
+      - "8080:8080"
+
+volumes:
+  db-data:

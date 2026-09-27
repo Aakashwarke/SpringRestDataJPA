@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: springlaunch
+  datasource:
+    url: ${DATABASE_URL:jdbc:h2:mem:springlaunch;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH}
+    username: ${DATABASE_USERNAME:sa}
+    password: ${DATABASE_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: never
+    include-stacktrace: never
+
+springlaunch:
+  jwt:
+    # CHANGE THIS. Generate with: openssl rand -base64 48
+    secret: ${JWT_SECRET:dev-only-secret-change-me-before-you-deploy-anything-abcdef123456}
+    issuer: springlaunch
+    access-token-ttl: PT15M
+    refresh-token-ttl: P30D
+  billing:
+    # Leave provider=fake for local development; set to stripe in production.
+    provider: ${BILLING_PROVIDER:fake}
+    stripe:
+      secret-key: ${STRIPE_SECRET_KEY:}
+      webhook-secret: ${STRIPE_WEBHOOK_SECRET:}
+      api-base-url: https://api.stripe.com
+      success-url: ${BILLING_SUCCESS_URL:http://localhost:8080/billing/success}
+      cancel-url: ${BILLING_CANCEL_URL:http://localhost:8080/billing/cancel}
+      price-id-pro: ${STRIPE_PRICE_PRO:}
+      price-id-scale: ${STRIPE_PRICE_SCALE:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+logging:
+  level:
+    org.springframework.security: INFO

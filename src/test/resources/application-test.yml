@@ -1,0 +1,16 @@
+# Overlays application.yml rather than replacing it. Kept as a profile on purpose: a bare
+# src/test/resources/application.yml would shadow the main file on the classpath and silently
+# drop every default it defines.
+spring:
+  datasource:
+    url: jdbc:h2:mem:springlaunch-test;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+
+springlaunch:
+  jwt:
+    secret: test-secret-key-that-is-long-enough-for-hmac-sha256-signing-0123456789
+  billing:
+    provider: fake
+    stripe:
+      webhook-secret: whsec_test_secret
