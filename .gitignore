@@ -16,3 +16,6 @@ target/
 *.log
 
 .DS_Store
+
+# Recovery bundles are local artefacts, not part of the kit.
+*.bundle
