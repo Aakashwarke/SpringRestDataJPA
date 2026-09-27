@@ -19,3 +19,6 @@ target/
 
 # Recovery bundles are local artefacts, not part of the kit.
 *.bundle
+
+# Local screenshots from the e2e walkthrough.
+shot-*.png
